@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast.js - Componente de Notificaciones</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/componente.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #f5f5f5; color: #222; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 35px; background-color: #2c3e50; }
+        .navbar-brand { font-size: 1.2rem; font-weight: 700; color: #fff; text-decoration: none; }
+        .hero { text-align: center; padding: 50px 20px 30px; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: #fff; }
+        .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
+        .hero p { font-size: 0.95rem; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto; line-height: 1.5; }
+        .container { max-width: 880px; margin: 0 auto; padding: 30px 20px; }
+        .card { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card h2 { font-size: 1.15rem; margin-bottom: 6px; color: #333; }
+        .card .desc { color: #666; font-size: 0.85rem; margin-bottom: 18px; line-height: 1.5; }
+        .demo-botones { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+        .btn-demo { padding: 10px 18px; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: #fff; transition: opacity 0.2s; }
+        .btn-demo:hover { opacity: 0.85; }
+        .btn-demo-success { background-color: #27ae60; }
+        .btn-demo-error { background-color: #e74c3c; }
+        .btn-demo-warning { background-color: #f39c12; }
+        .btn-demo-info { background-color: #3498db; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: #555; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 13px; background-color: #fafafa; border: 1px solid #ddd; border-radius: 6px; color: #222; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: #3498db; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 11px 22px; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+        .btn-primary { background-color: #2c3e50; color: #fff; }
+        .btn-primary:hover { background-color: #1a252f; }
+        .codigo-ejemplo { background-color: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.6; overflow-x: auto; white-space: pre; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        thead tr { border-bottom: 2px solid #e0e0e0; text-align: left; }
+        tbody tr { border-bottom: 1px solid #eee; }
+        th, td { padding: 8px; }
+        td code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 0.82rem; }
+        .footer { text-align: center; padding: 18px; color: #aaa; font-size: 0.76rem; border-top: 1px solid #eee; margin-top: 30px; }
+        @media (max-width: 768px) { .hero h1 { font-size: 1.7rem; } .navbar { padding: 12px 16px; } .form-row { grid-template-columns: 1fr; } .card { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">Toast.js</a>
+    </nav>
+    <section class="hero">
+        <h1>Toast.js</h1>
+        <p>Componente de notificaciones Toast reutilizable. Genera alertas dinámicas sin escribir HTML, solo con JavaScript puro.</p>
+    </section>
+    <main class="container">
+        <div class="card">
+            <h2>Prueba rápida</h2>
+            <p class="desc">Haz clic en los botones para ver los diferentes tipos de notificación.</p>
+            <div class="demo-botones">
+                <button class="btn-demo btn-demo-success" id="btnExito" onclick="toastExito('¡Los datos se guardaron correctamente!')">✓ Toast Éxito</button>
+                <button class="btn-demo btn-demo-error" id="btnError" onclick="toastError('No se pudo conectar con el servidor')">✗ Toast Error</button>
+                <button class="btn-demo btn-demo-warning" id="btnWarning" onclick="toastAdvertencia('Tu sesión expira en 5 minutos')">⚠ Toast Advertencia</button>
+                <button class="btn-demo btn-demo-info" id="btnInfo" onclick="toastInfo('Tienes 3 mensajes nuevos')">ℹ Toast Info</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Toast personalizado</h2>
+            <p class="desc">Configura tu propio toast cambiando el mensaje, tipo, duración y posición.</p>
+            <div class="form-row">
+                <div class="form-group"><label for="toastMensaje">Mensaje</label><input type="text" id="toastMensaje" value="¡Hola desde el toast!"></div>
+                <div class="form-group"><label for="toastTipo">Tipo</label><select id="toastTipo"><option value="success">Éxito (verde)</option><option value="error">Error (rojo)</option><option value="warning">Advertencia (naranja)</option><option value="info" selected>Info (azul)</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label for="toastDuracion">Duración (ms)</label><input type="number" id="toastDuracion" value="4000" min="1000" max="15000"></div>
+                <div class="form-group"><label for="toastPosicion">Posición</label><select id="toastPosicion"><option value="arriba-derecha" selected>Arriba derecha</option><option value="arriba-izquierda">Arriba izquierda</option><option value="abajo-derecha">Abajo derecha</option><option value="abajo-izquierda">Abajo izquierda</option></select></div>
+            </div>
+            <button class="btn btn-primary" id="btnCustom" onclick="lanzarPersonalizado()">Lanzar Toast Personalizado</button>
+        </div>
+        <div class="card">
+            <h2>Cómo usarlo en tu proyecto</h2>
+            <p class="desc">Solo necesitas incluir 2 archivos y llamar la función.</p>
+            <pre class="codigo-ejemplo"><code>&lt;!-- 1. Incluir los archivos --&gt;
+&lt;link rel="stylesheet" href="css/componente.css"&gt;
+&lt;script src="js/componente.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. Llamar la funcion --&gt;
+&lt;script&gt;
+  // atajos rapidos
+  toastExito("¡Datos guardados!");
+  toastError("Algo salió mal");
+
+  // con todas las opciones
+  crearToast({
+    mensaje: "Sesión por expirar",
+    tipo: "warning",
+    duracion: 5000,
+    posicion: "abajo-derecha"
+  });
+&lt;/script&gt;</code></pre>
+        </div>
+        <div class="card">
+            <h2>Parámetros disponibles</h2>
+            <p class="desc">La función <code>crearToast(opciones)</code> acepta:</p>
+            <table>
+                <thead><tr><th>Parámetro</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
+                <tbody>
+                    <tr><td><code>mensaje</code></td><td>string</td><td>"Notificación"</td><td>Texto del toast</td></tr>
+                    <tr><td><code>tipo</code></td><td>string</td><td>"info"</td><td>success, error, warning, info</td></tr>
+                    <tr><td><code>duracion</code></td><td>number</td><td>4000</td><td>Milisegundos visible</td></tr>
+                    <tr><td><code>posicion</code></td><td>string</td><td>"arriba-derecha"</td><td>Esquina de la pantalla</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer class="footer"><p>Toast.js - Manuel Matias 2026</p></footer>
+    <script src="js/componente.js"></script>
+    <script>
+        function lanzarPersonalizado() {
+            var msg = document.getElementById("toastMensaje").value || "Escribe un mensaje";
+            var tipo = document.getElementById("toastTipo").value;
+            var dur = parseInt(document.getElementById("toastDuracion").value) || 4000;
+            var pos = document.getElementById("toastPosicion").value;
+            crearToast({ mensaje: msg, tipo: tipo, duracion: dur, posicion: pos });
+        }
+    </script>
+</body>
+</html>
