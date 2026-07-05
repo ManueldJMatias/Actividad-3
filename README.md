@@ -1,4 +1,4 @@
-# Toast.js - Componente de Notificaciones
+# ACTIVIDAD 3.- COMPONENTE VISUAL
 
 Por: Manuel de Jesus Matias Carreño
 Matricula: 22161159
@@ -86,22 +86,12 @@ toastInfo("Cargando...", 2000);
 - Se pueden apilar varios toasts a la vez
 - Responsive en pantallas chicas
 
-## Estructura del proyecto
-
-```
-/Tarea1
-├── README.md
-├── index.html
-├── css/
-│   └── componente.css
-├── js/
-│   └── componente.js
-└── img/
-```
-
 ## Capturas de pantalla
 
 ![Demo del componente](img/demo.png)
+## VIDEO:
+
+
 
 ## Autor
 
